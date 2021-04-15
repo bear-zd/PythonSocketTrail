@@ -5,11 +5,7 @@ from threading import Thread  # 导入线程函数
 import sys
 from time import sleep
 
-#class Window():
-#    CliStatus=-1
-#    def __init__(self):
-#        self.Server=UIS.Ui_MainWindow()
-#        self.Client=
+
 
 class Client():
 
@@ -58,22 +54,30 @@ class Client():
 
     def __sendMessage__(self): #发送信息
             Message=self.ClientWindow.textEdit_3.toPlainText()
-            self.Cs.sendall(Message.encode('utf-8'))
-            self.ClientWindow.textEdit_3.setText('')
+            print('try send!')
+            self.__showMessage__('send:' + Message)
+            self.Cs.send(Message.encode('utf-8'))
 
     def __showMessage__(self,Message): #展示信息
         self.ClientWindow.textBrowser_2.append(Message)
 
     def __listen__(self): #监听
+        self.Cs.setblocking(0)
         while self.CliStatus==1:
-            sleep(2)
-            RecMessage=self.Cs.recv(1024).decode('utf-8')
-            print('One loop')
+            RecMessage = ''
+            try:
+                RecMessage=self.Cs.recv(1024).decode('utf-8')
+            except BlockingIOError:
+                pass
             if RecMessage!='':
                 print(RecMessage)
-                self.__showMessage__(RecMessage)
+                self.__showMessage__('recived:'+RecMessage)
             if self.ClientWindow.pushButton_2.isDown():
                 self.__close__()
+                sleep(1)
+            if self.ClientWindow.pushButton_3.isDown():
+                self.__sendMessage__()
+                sleep(1)
 
 
     def __close__(self):
@@ -94,7 +98,7 @@ class Server():
         #self.ServerWindow.pushButton.clicked.connect(self.__start__) #按钮一绑定open
         #self.ServerWindow.pushButton_2.clicked.connect(self.__close__)  #按钮二绑定close
         #self.ServerWindow.pushButton_3.clicked.connect(self.__send__) #按钮三绑定send
-        #self.Serstatus = -1
+        self.Serstatus = -1
         AppSThread = Thread(target=self.__wait__)
         AppSThread.start()
         AppS.exec()
@@ -119,7 +123,7 @@ class Server():
             self.Ss.listen()
             self.ServerWindow.pushButton.setText('opened')
             self.__showMessage__('Server opend!')
-            Serstatus=1
+            self.Serstatus=1
             self.__listen__()
         except ss.error:
             return
@@ -137,17 +141,21 @@ class Server():
         self.__listening__(c)
 
     def __listening__(self,c):
+        c.setblocking(0)
         while self.Serstatus:
-            if self.ServerWindow.pushButton_2.isChecked():
+            RecMessage=''
+            try:
+                RecMessage = c.recv(1024).decode('utf-8')
+            except:
+                pass
+            if RecMessage !='':
+                self.__showMessage__('recieve:'+RecMessage)
+            if self.ServerWindow.pushButton_2.isDown():
                 self.__close__(flag=0)
-            #Message = ss.recv(1024)
-            #if Message:
-            #    self.__showMessage__(Message.decode('utf-8'))
-            if self.ServerWindow.pushButton_3.isChecked():
+                sleep(1)
+            if self.ServerWindow.pushButton_3.isDown():
                 self.__send__(c)
-                print('pushButtonClicked!')
-
-
+                sleep(1)
 
     def __close__(self,flag):
         if flag==1:
@@ -161,8 +169,9 @@ class Server():
 
     def __send__(self,com):
         Message = self.ServerWindow.textEdit_2.toPlainText()
-        print(Message)
         com.send(Message.encode('utf-8'))
+        self.__showMessage__('send:'+Message)
+        print('send:'+Message)
         #self.ServerWindow.textEdit_2.clear()
 
 
