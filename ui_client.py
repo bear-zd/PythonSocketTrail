@@ -66,9 +66,9 @@ class Ui_MainWindow(object):
         self.pushButton_3 = QPushButton(self.centralwidget)
         self.pushButton_3.setObjectName(u"pushButton_3")
         self.pushButton_3.setGeometry(QRect(460, 180, 75, 24))
-        self.pushButton_4 = QPushButton(self.centralwidget)
-        self.pushButton_4.setObjectName(u"pushButton_4")
-        self.pushButton_4.setGeometry(QRect(460, 290, 75, 24))
+        #self.pushButton_4 = QPushButton(self.centralwidget)
+        #self.pushButton_4.setObjectName(u"pushButton_4")
+        #self.pushButton_4.setGeometry(QRect(460, 290, 75, 24))
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")
@@ -101,6 +101,6 @@ class Ui_MainWindow(object):
 "</style></head><body style=\" font-family:'SimSun'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Microsoft YaHei UI';\">\u5982\u679c\u4e0d\u8f93\u5165\uff0c\u5219\u9ed8\u8ba4\u4e3a\u672c\u5730ip</span></p></body></html>", None))
         self.pushButton_3.setText(QCoreApplication.translate("MainWindow", u"send", None))
-        self.pushButton_4.setText(QCoreApplication.translate("MainWindow", u"Refresh", None))
+        #self.pushButton_4.setText(QCoreApplication.translate("MainWindow", u"Refresh", None))
     # retranslateUi
 
